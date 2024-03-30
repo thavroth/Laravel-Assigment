@@ -20,6 +20,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'phone_number',
         'password',
     ];
 
@@ -41,4 +42,18 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public static function store($request, $id = null)
+    {
+        $user = $request->only([
+            'name',
+            'email',
+            'password',
+            'phone_number',
+            'role_id',
+            'department_id',
+        ]);
+        $user = self::updateOrCreate(['id' => $id], $user);
+        return $user;
+    }
 }

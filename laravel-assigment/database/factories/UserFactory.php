@@ -4,9 +4,18 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
+use App\Models\User;
+use App\Models\Role;
+use App\Models\Department;
 
 class UserFactory extends Factory
 {
+      /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = User::class;
     /**
      * Define the model's default state.
      *
@@ -14,11 +23,17 @@ class UserFactory extends Factory
      */
     public function definition()
     {
+        $role = Role::inRandomOrder()->first();
+        $department = Department::inRandomOrder()->first();
+
         return [
             'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
+            'phone_number' => $this->faker->phoneNumber(),
+            'role_id' => $role->id,
+            'department_id' => $department->id,
             'email_verified_at' => now(),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'password' => bcrypt('password'),
             'remember_token' => Str::random(10),
         ];
     }
